@@ -59,7 +59,7 @@ export class World{
  }
     clearCanvas(){
         if(this.c){
-            this.c.fillStyle = "white"
+            this.c.fillStyle = "#b2f25e"
             this.c.fillRect(0,0,this.canvas.width, this.canvas.height)
         }
     }

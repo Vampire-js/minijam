@@ -25,21 +25,28 @@ export class Player {
         }
         this.health = 100
         this.bDamage = 5
-        this.rad = 40
+        this.rad = 60
     }
     draw(){
-        this.c.fillStyle = "red"
+        
         this.c.beginPath()
         this.c.arc(this.position.x, this.position.y, this.rad , 0, Math.PI*2)
         this.c.stroke()
+
+        
 
         //Health bar
 
         this.c.fillStyle = "black"
         this.c.fillRect(30, 30, 200,40)
         
-        this.c.fillStyle = this.health > 30?  "green": "red"
+        this.c.save()
+        // this.c.translate(35,35)
+        // this.c.rotate(1)
+        this.c.fillStyle = this.health > 30?  "#5ed7f2": "#f25e5e"
         this.c.fillRect(35, 35, 190*this.health/100,30)
+
+        this.c.restore()
  
     }
 

@@ -13,6 +13,8 @@ export class Sword {
     end: Vector; // Sword tip position
     length: number; // Sword length
     c: CanvasRenderingContext2D;
+    img:HTMLImageElement | undefined
+    skin:HTMLImageElement | undefined
 
     constructor(position: Vector, c: CanvasRenderingContext2D) {
         this.src = "";
@@ -20,22 +22,29 @@ export class Sword {
         this.dir = new Vector(1, 0); // Default direction
         this.position = position;
         this.mouse = new Vector(100, 100);
-        this.length = 150;
+        this.length = 180;
         this.c = c;
 
         this.end = this.position.add(this.dir.mult(this.length));
     }
 
     render() {
-        this.c.strokeStyle = "black";
-        this.c.beginPath();
-        this.c.moveTo(this.position.x, this.position.y);
-        this.c.lineTo(this.end.x, this.end.y);
-        this.c.lineWidth = 2;
-        this.c.stroke();
-        this.c.closePath()
 
+        // this.c.strokeStyle = "black";
+        // this.c.beginPath();
+        // this.c.moveTo(this.position.x, this.position.y);
+        // this.c.lineTo(this.end.x, this.end.y);
+        // this.c.lineWidth = 2;
+        // this.c.stroke();
+        // this.c.closePath()
+
+        this.attachSprite()
+        this.attachPlayerSkin()
    
+    }
+    attachSprite(){
+        this.img = new Image()
+        this.img.src="/src/typescript.svg"
     }
     giveDamage(enemy:Enemy){
         // let dir = this.end.sub(this.position).unit()
@@ -75,7 +84,7 @@ export class Sword {
             //     let collisionNormal = ballToClosestPoint.unit();
             //     this.position = closestPoint.add(collisionNormal.mult(this.r));
             //     this.velocity = this.velocity.sub(collisionNormal.mult(2 * this.velocity.dot(collisionNormal))).add(collisionNormal.mult(closestPoint.sub(wall.start).mag()*wall.omega)).mult(.8) // Damping factor
-            enemy.takeDamage(50)
+            enemy.takeDamage(25)
                 console.log("HIT!")
         }
         }
@@ -91,17 +100,41 @@ export class Sword {
 
         let desiredAngle = Math.atan2(toMouse.y, toMouse.x);
 
+        
         let angleDiff = desiredAngle - this.rotation;
      
-        this.rotation += angleDiff * 0.05;
+        this.rotation += angleDiff * 0.2;
 
         this.dir = new Vector(Math.cos(this.rotation), Math.sin(this.rotation));
         this.end = this.position.add(this.dir.mult(this.length));
     }
 
+    attachPlayerSkin(){
+        this.skin = new Image()
+        this.skin.src="/src/assets/player.svg"
+    }
     update() {
         this.rotateTowardsMouse();
         // this.giveDamage()
+        if(this.img){
+            this.c.save()
+        this.c.translate(this.position.x, this.position.y)
+        this.c.rotate(this.rotation)
+            this.c.drawImage(this.img, -10,-100)
+
+            this.c.restore()
+        }
+
+    
+        if(this.skin){
+            this.c.save()
+        this.c.translate(this.position.x, this.position.y)
+        this.c.rotate(this.rotation)
+            this.c.drawImage(this.skin, -100,-60)
+
+            this.c.restore()
+        }
+
         this.render();
     }
 }
