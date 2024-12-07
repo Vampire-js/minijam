@@ -59,8 +59,13 @@ export class World{
  }
     clearCanvas(){
         if(this.c){
-            this.c.fillStyle = "#b2f25e"
+            let img = new Image()
+            img.src = "/src/assets/grass.jpg"
+            let pat = this.c.createPattern(img,"repeat")
+            
+            if(pat) this.c.fillStyle = pat
             this.c.fillRect(0,0,this.canvas.width, this.canvas.height)
+
         }
     }
   
