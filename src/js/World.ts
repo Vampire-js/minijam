@@ -10,6 +10,8 @@ export class World{
     enemy:Enemy | undefined
     time: number
     enemies:Array<Enemy>
+
+    bg:any
     constructor(){
       this.canvas = document.createElement("canvas")
       this.canvas.width = innerWidth
@@ -17,10 +19,11 @@ export class World{
       this.c = this.canvas.getContext("2d")
       this.enemies = []
       this.time = 0;
+      this.bg =  document.getElementById("background")
      this.init()
     }
     init(){
-      document.body.append(this.canvas)
+      document.getElementById("canvas-container")?.append(this.canvas)
   
       this.drawPlayer()
 
@@ -47,7 +50,7 @@ export class World{
  attachSword(){
     if(this.c && this.player){
         this.sword = new Sword(this.player.position, this.c)
-
+        this.sword.mouse = new Vector(this.canvas.width/2, this.canvas.height/2)
         this.sword.render()
     }
  }
@@ -58,14 +61,15 @@ export class World{
     }
  }
     clearCanvas(){
-        if(this.c){
-            let img = new Image()
-            img.src = "/src/assets/grass.jpg"
-            let pat = this.c.createPattern(img,"repeat")
+        if(this.c && this.bg){
+            if (this.bg.complete) {
+                const pattern = this.c.createPattern(this.bg, "repeat");
+                if (pattern) {
+                    this.c.fillStyle = pattern;
+                    this.c.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                }
+            }
             
-            if(pat) this.c.fillStyle = pat
-            this.c.fillRect(0,0,this.canvas.width, this.canvas.height)
-
         }
     }
   
@@ -89,9 +93,9 @@ export class World{
             this.sword?.giveDamage(e)
             this.player?.bodyDamage(e)
 
-            if(e.isDead){
-                this.enemies = this.enemies.filter(a => a.id != e.id)
-            }
+            // if(e.isDead){
+            //     this.enemies = this.enemies.filter(a => a.id != e.id)
+            // }
             e.update()
         })
     }

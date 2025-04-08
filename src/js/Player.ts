@@ -24,14 +24,14 @@ export class Player {
             d:false
         }
         this.health = 100
-        this.bDamage = 5
+        this.bDamage = 50
         this.rad = 60
     }
     draw(){
         
-        this.c.beginPath()
-        this.c.arc(this.position.x, this.position.y, this.rad , 0, Math.PI*2)
-        this.c.stroke()
+        // this.c.beginPath()
+        // this.c.arc(this.position.x, this.position.y, this.rad , 0, Math.PI*2)
+        // this.c.stroke()
 
         
 
@@ -51,7 +51,7 @@ export class Player {
     }
 
     bodyDamage(enemy:Enemy){
-        if(this.position.sub(enemy.position).mag() < this.rad + enemy.rad){
+        if( !enemy.isDead && this.position.sub(enemy.position).mag() < this.rad + enemy.rad){
             enemy.takeDamage(this.bDamage)
                 this.health -= 10
         }

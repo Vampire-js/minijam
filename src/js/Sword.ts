@@ -92,9 +92,9 @@ export class Sword {
 
    
     rotateTowardsMouse() {
-        document.onmousemove = (e) => {
-            this.mouse = new Vector(e.pageX, e.pageY);
-        };
+        // document.onmousemove = (e) => {
+        //     this.mouse = new Vector(e.pageX, e.pageY);
+        // };
 
         let toMouse = this.mouse.sub(this.position);
 
@@ -107,6 +107,15 @@ export class Sword {
 
         this.dir = new Vector(Math.cos(this.rotation), Math.sin(this.rotation));
         this.end = this.position.add(this.dir.mult(this.length));
+
+
+        this.c.beginPath()
+        this.c.strokeStyle="#a66a46"
+        this.c.moveTo(this.mouse.x, this.mouse.y)
+        this.c.lineTo(this.position.x, this.position.y)
+        this.c.lineWidth = 10
+        this.c.lineCap = "round"
+        this.c.stroke()
     }
 
     attachPlayerSkin(){

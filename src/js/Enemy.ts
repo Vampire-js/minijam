@@ -12,6 +12,7 @@ rad:number
 
     skin:HTMLImageElement | undefined
     leftFoot:HTMLImageElement | undefined
+    blood: HTMLImageElement | undefined
 
     time:number
     constructor(x:number,y:number,c:CanvasRenderingContext2D){
@@ -30,14 +31,18 @@ rad:number
         this.c.beginPath()
         this.c.arc(this.position.x, this.position.y, this.rad , 0, Math.PI*2)
         this.c.stroke()
-
+        let angle = Math.atan2(this.velocity.y , this.velocity.x)
+        this.c.save()
+        this.c.translate(this.position.x, this.position.y)
+        this.c.rotate(angle + Math.PI/2)    
         this.c.fillStyle = "black"
-        this.c.fillRect(this.position.x -25, this.position.y - 40, 50,10)
+        this.c.fillRect(-75,100, 150,30)
         this.c.fillStyle = "green"
-        this.c.fillRect(this.position.x -25, this.position.y - 40, 50*this.health/100,10)
-
+        this.c.fillRect(-75,  100, 150*this.health/100,30)
+        this.c.restore()
         this.attachSkin()
         this.attachFeet()
+        this.attachBlood()
     }
     calculateVelocity(){
         let dir = this.target.sub(this.position).unit()
@@ -56,16 +61,22 @@ rad:number
         this.leftFoot = new Image()
         this.leftFoot.src = "/src/assets/left-foot.png"
     }
+    attachBlood(){
+        this.blood = new Image()
+        this.blood.src = "/src/assets/blood.svg"
+    }
     update(){
 if(this.health <= 0){
     this.isDead = true
 }
 this.time += 0.1
+
         if(this.health > 0){
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
-        this.calculateVelocity()
         this.render()
+        this.calculateVelocity()
+       
 
         if(this.skin && this.leftFoot){
         let angle = Math.atan2(this.velocity.y , this.velocity.x)
@@ -81,6 +92,14 @@ this.time += 0.1
         this.c.restore()
 
         }
+        }else{
+            if(this.blood){
+
+            this.c.save()
+            this.c.translate(this.position.x, this.position.y)
+            this.c.drawImage(this.blood,0,0 )
+            this.c.restore()
+            }
         }
     }
 }
